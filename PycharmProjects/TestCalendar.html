@@ -1,0 +1,55 @@
+<html>
+<head>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script>
+
+$(function () {
+        $("#date").datepicker({
+        //In Datepicker set the Calendar display start with Monday
+        firstDay: 1,
+
+        //Before Populating the Calendar set the Enabled & Disabled Dates using beforeShowDay(Date) function
+        beforeShowDay: function (date) {
+            //var monday = new Date("June 1, 2013 00:00:00"); Used it for testing
+
+            //Get today's date
+            var monday = new Date();
+
+            //Set the time of today's date to 00:00:00
+            monday.setHours(0,0,0,0);
+
+            //alert(monday.getDay() + ' : ' + monday.getDate() + ' : ' + (monday.getDay() || 7) + ' : ' + monday); Used it for testing
+
+            /*
+            Below Line sets the Date to Monday (Start of that Week)
+            (monday.getDay() || 7) returns the value of getDay()
+            ie., [ 1 - Mon, 2 - Tue, 3 - Wed, 4 - Thu, 5 - Fri, 6 - Sat ]
+            except for Sunday where it returns 7.
+            The return value is used to calculate the Date of that Week's Monday
+            */
+
+            monday.setDate(monday.getDate() + 1 - (monday.getDay() || 7));
+
+            //Set the Date to Monday
+            var sunday = new Date(monday);
+
+            //Now add 6 to Monday to get the Date of Sunday (End of that Week)
+            sunday.setDate(monday.getDate() + 6);
+
+            //Now return the enabled and disabled dates to datepicker
+            return [(date >= monday && date <= sunday), ''];
+        }
+    });
+
+    //Set the date format to dd/mm/yy ie., 30/10/1989
+    $("#date").datepicker("option", "dateFormat", "dd/mm/yy");
+});
+</script>
+</head>
+<body>
+<p><b>Select Date:</b></p>
+Date: <input type="text" id="date" />
+</body>
+</html>
